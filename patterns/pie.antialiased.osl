@@ -1,0 +1,56 @@
+/*
+ * pie.antialiased.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * Use this with a colorramp-node to create pie-shaped
+ * patterns. The center of the pie can have a dot to
+ * remove the aliasing that might occur there.
+ *
+ */
+
+#include "stdosl.h"
+
+shader node_Pie(
+int Slices = 4,
+float Angle = 0,
+float SmoothCenter = 0,
+float Noise = 0,
+point TextureVector = P,
+output color Texture = 0
+)
+{
+    float angle_intern = 0;    
+    float centerDot = 0;
+    
+    // create a smooth dot in the center for antialiasing
+    centerDot = sqrt(TextureVector[0]*TextureVector[0]+TextureVector[1]*TextureVector[1]);
+    
+    // the dot is currently from black to white - invert it
+    centerDot = 1-centerDot;
+    
+    // resize the dot with smooth transition
+    centerDot = smoothstep(1-SmoothCenter,1,centerDot);
+    
+    // convert the input coordinates to polar coordinates
+    angle_intern = atan2(TextureVector[0],TextureVector[1]);
+    
+    /* convert the input angle from degrees to radians
+    * and rotate the coordinate system by 'Angle' degrees */
+    angle_intern += Angle*M_PI/180.0;
+    
+    /* use the sine function to create a radial stripe pattern.
+    * at the beginning 0.5-0.5-sin() is used to normalize the output
+    * The number of stripes is determined by 'Slices' and the stripes
+    * are getting distorted by the texture input in 'Noise' */
+    float piepattern = 0.5-0.5*sin(angle_intern * Slices - Noise );
+    
+    // remove the aliasing in the center by adding the dot
+    piepattern += centerDot;
+    
+    // the result has values >1 so clamp it
+    piepattern = clamp(piepattern, 0,1);
+    
+    Texture = piepattern;
+} 
