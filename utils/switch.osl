@@ -1,0 +1,26 @@
+/*
+ * switch.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * This node mimics the switch-node from the Blender 
+ * compositor for OSL shaders. To be compatible with
+ * the current implementation of OSL in Blender Cycles
+ * switching is determined by an integer input.
+ *
+ */
+
+#include "stdosl.h"
+
+shader node_switch(
+integer switch = 0,
+closure color Closure1 = 0,
+closure color Closure2 = 0,
+output closure color Closure = 0)
+{
+    if (Switch == 0)
+        Closure = Closure1;
+    else 
+        Closure = Closure2;
+}

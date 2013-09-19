@@ -1,0 +1,23 @@
+/*
+ * addvanced.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * This node acts like the normal add-node for shaders in Cycles
+ * But it has factors for the inputs so it can be used with tools
+ * like fresnel.
+ *
+ */
+
+#include "stdosl.h"
+
+shader node_addvanced(
+float Fac1 = 0.5,
+closure color Closure1 = 0,
+float Fac2 = 0.5,
+closure color Closure2 = 0,
+output closure color Closure = 0)
+{
+    Closure = Fac1*Closure1 + Fac2*Closure2;
+} 

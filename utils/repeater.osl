@@ -1,0 +1,28 @@
+/*
+ * repeater.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * Use this node to repeat radial patterns by plugging it
+ * before the vector input.
+ *
+ */
+
+#include "stdosl.h"
+
+shader node_Repeater(
+float Size = 1.0,
+float SpacingX = 1.0,
+float SpacingY = 1.0,
+point TextureVector = P,
+output point NewVec = 0
+)
+{
+    point tempVec = TextureVector;
+    
+    tempVec[0] = mod(tempVec[0]/Size,SpacingX) - 0.5;
+    tempVec[1] = mod(tempVec[1]/Size,SpacingY) - 0.5;
+ 
+    NewVec = tempVec;
+} 
