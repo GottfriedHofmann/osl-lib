@@ -5,7 +5,12 @@
  * license: MIT
  *
  * Use this node to repeat radial patterns by plugging it
- * before the vector input.
+ * before the vector input. Inputs:
+ * Be carefull with spacing and shift. Once you shift patterns
+ * might start to overlap. Spacing on the same axis can have any
+ * value then while spacing of the other axis should only use 
+ * integral numbers.
+ * Warning: Don't shift both axis!
  *
  */
 
@@ -15,14 +20,23 @@ shader node_Repeater(
 float Size = 1.0,
 float SpacingX = 1.0,
 float SpacingY = 1.0,
+float ShiftX = 0.0,
+float ShiftY = 0.0,
 point TextureVector = P,
 output point NewVec = 0
 )
 {
     point tempVec = TextureVector;
     
-    tempVec[0] = mod(tempVec[0]/Size,SpacingX) - 0.5;
-    tempVec[1] = mod(tempVec[1]/Size,SpacingY) - 0.5;
+    //the size is growing or shrinking our complete texture space
+    //we need to compute that only once
+    float ss = tempVec[0]/Size;
+    float tt = tempVec[1]/Size;
+    
+    tempVec[0] = mod(ss + ShiftX*floor(tt),SpacingX) - 0.5;
+    
+    
+    tempVec[1] = mod(tt + ShiftY*floor(ss),SpacingY) - 0.5;
  
     NewVec = tempVec;
 } 
