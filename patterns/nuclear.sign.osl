@@ -1,0 +1,55 @@
+/*
+ * pie.antialiased.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ */
+
+shader nuclearSign(
+    color ColorSign = color(1,1,0),
+    color ColorBackground = color(0,0,0),
+    int Rays = 3,
+    float Scale = 1.0,
+    float Rotation = 30.0,
+    float Raywidth = 1.0,
+    float RayOuter = 0.8,
+    float RayInner = 0.2,
+    float RingThickness = 0.1,
+    float DotSize = 0.1,
+    vector TextureVector = P,
+    output color Color = color(0.2)
+)
+{
+    float rw = (-Raywidth+1);
+    float r = length(TextureVector/Scale);
+    
+    // convert the input coordinates to polar coordinates
+    float angle_intern = atan2(TextureVector[0],TextureVector[1]);
+    
+    /* convert the input angle from degrees to radians
+    * and rotate the coordinate system by 'Angle' degrees */
+    angle_intern += Rotation*M_PI/180.0;
+    
+    //create the rays
+    float s = sin(angle_intern*Rays);    
+    float d = step(rw, s);
+    d *= RayOuter;
+    //we want sharp edges
+    float nuclear = step(r,d);
+    
+    //create the outer ring
+    float ringOuter = step(r,1.0);
+    float ringInner = step(r,1.0-RingThickness);
+    float ring = ringOuter - ringInner;   
+    nuclear += ring;
+    
+    //make the center dark and create the dot
+    float darkCenter = step(RayInner,r);    
+    nuclear *= darkCenter;
+    
+    float centerDot = step(r, DotSize);
+    nuclear += centerDot;
+    
+    Color = mix(ColorBackground, ColorSign, nuclear);
+}
