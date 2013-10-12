@@ -1,0 +1,26 @@
+/*
+ * dot.linear.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * A simple dot with outputs similiar to the Cycles 
+ * gradient texture node.
+ *
+ */
+
+shader dotLinear(
+    float Scale = 1.0,
+    vector TextureVector = P,
+    output color Color = color(0.0),
+    output float Fac = 0
+)
+{
+    //we dont want a sphere but a linear dot, so ignore the z-component
+    vector tmpVec = TextureVector;
+    tmpVec[2] = 0;
+    float r = length(tmpVec/Scale);
+    
+    Color = r;
+    Fac = r;
+}
