@@ -22,7 +22,10 @@ shader nuclearSign(
 )
 {
     float rw = (-Raywidth+1);
-    float r = length(TextureVector/Scale);
+    //we dont want a sphere but a linear dot, so ignore the z-component
+    vector tmpVec = TextureVector;
+    tmpVec[2] = 0;
+    float r = length(tmpVec/Scale);
     
     // convert the input coordinates to polar coordinates
     float angle_intern = atan2(TextureVector[0],TextureVector[1]);
