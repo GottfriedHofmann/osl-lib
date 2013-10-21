@@ -38,7 +38,7 @@ output color Texture = 0
     
     /* convert the input angle from degrees to radians
     * and rotate the coordinate system by 'Angle' degrees */
-    angle_intern += Angle*M_PI/180.0;
+    angle_intern -= radians(Angle);
     
     /* use the sine function to create a radial stripe pattern.
     * at the beginning 0.5-0.5-sin() is used to normalize the output
