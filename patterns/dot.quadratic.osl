@@ -1,0 +1,30 @@
+/*
+ * dot.quadratic.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * A simple dot with outputs similiar to the Cycles 
+ * gradient texture node.
+ *
+ */
+
+#include "stdosl.h"
+
+shader node_Pie(
+float Scale = 1,
+point TextureVector = P,
+output color Texture = 0
+)
+{
+    float centerDot = 0;
+    float s = TextureVector[0]/Scale;
+    float t = TextureVector[1]/Scale;
+    
+    // create a smooth dot in the center
+    centerDot = sqrt(s*s+t*t);
+    
+    // the dot is currently from black to white - invert it
+    centerDot = 1-centerDot;
+    Texture = centerDot;
+} 
