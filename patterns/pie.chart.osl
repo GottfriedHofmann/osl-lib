@@ -1,0 +1,42 @@
+/*
+ * pie.chart.osl by Gottfried Hofmann (c) 2013
+ * from https://github.com/GottfriedHofmann/osl-lib
+ *
+ * license: MIT
+ *
+ * You can create a simple pie-chart with this shader.
+ * Unfortunately you have to enter the values and colors
+ * for the chart manually in the code in the form of 
+ * several if-statements.
+ *
+ */
+
+#include "stdosl.h"
+
+shader node_Pie(
+float Angle = 0,
+float Noise = 0,
+vector TextureVector = P,
+output color Color = 0
+)
+{
+    float angle_intern = 0;    
+    
+    // convert the input coordinates to polar coordinates
+    angle_intern = atan2(TextureVector[0],TextureVector[1]);
+    
+    // fit the polar values into a 0-1 range
+    angle_intern = angle_intern/M_PI + 1;
+    angle_intern /= 2;
+    
+    if(angle_intern < 0.2)
+        Color = color(0, 0, 1);
+    else if (angle_intern < 0.65)
+        Color = color(0, 1,0);
+    else if (angle_intern < 0.7)
+        Color = color(1, 0, 0);
+    else if (angle_intern < 1.0)
+        Color = color(1, 1, 0);
+    else 
+        Color = angle_intern;
+} 
